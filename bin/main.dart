@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'weather_api_client.dart';
 
 Future<void> main(List<String> arguments) async{
@@ -7,6 +9,15 @@ if(arguments.length != 1){
 }
 final city = arguments.first;
 final api = WeatherApiClient();
+try {
 final weather = await api.getWeather(city);
 print(weather);
+}
+on WeatherApiException catch(e){
+  print(e.message);
+} on SocketException catch(_) {
+  print('Could not fetch data. Check connection');
+} catch(e){
+  print(e);
+}
 }
